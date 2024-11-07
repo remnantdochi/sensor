@@ -2,13 +2,14 @@
 
 SensorXYZ accelerometer(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
-// 100ms 간격을 설정
+
+// Set interval to 100ms
 const unsigned long interval = 100;
 unsigned long previousMillis = 0;
-// 변환 상수 정의
-const float accelConversionFactor = 9.81 / 4096.0; // 가속도 변환 상수 (m/s² 단위로 변환)
-const float gyroConversionFactor = 1.0 / 16.4;     // 자이로스코프 변환 상수 (°/s 단위로 변환)
 
+// Define conversion constants
+const float accelConversionFactor = 9.81 / 4096.0; // Conversion factor for acceleration (to m/s²)
+const float gyroConversionFactor = 1.0 / 16.4;     // Conversion factor for gyroscope (to °/s)
 
 void setup(){
   Serial.begin(115200);
@@ -24,20 +25,21 @@ void loop(){
   // Update function should be continuously polled
   BHY2.update();
 
-  // Check sensor values every second  
+  // Check sensor values at each interval  
   if (millis() - lastCheck >= interval) {
     lastCheck = millis();
-    // 가속도계 원시 데이터 읽기
+    
+    // Read raw accelerometer data
     short accX = accelerometer.x();
     short accY = accelerometer.y();
     short accZ = accelerometer.z();
 
-    // 자이로스코프 원시 데이터 읽기
+    // Read raw gyroscope data
     short gyroX = gyro.x();
     short gyroY = gyro.y();
     short gyroZ = gyro.z();
 
-    // 실제 단위로 변환
+    // Convert to actual units
     float actualAccX = accX * accelConversionFactor;
     float actualAccY = accY * accelConversionFactor;
     float actualAccZ = accZ * accelConversionFactor;
@@ -46,7 +48,7 @@ void loop(){
     float actualGyroY = gyroY * gyroConversionFactor;
     float actualGyroZ = gyroZ * gyroConversionFactor;
 
-    // 시리얼 모니터에 출력
+    // Output to serial monitor
     Serial.print("Acceleration (m/s²) - X: ");
     Serial.print(actualAccX, 2);
     Serial.print(", Y: ");
@@ -61,6 +63,6 @@ void loop(){
     Serial.print(", Z: ");
     Serial.println(actualGyroZ, 2);
 
-    Serial.println(); // 가독성을 위해 빈 줄 추가
+    Serial.println(); // Add a blank line for readability
   }
 }

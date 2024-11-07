@@ -2,33 +2,33 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Excel 파일에서 가속도 데이터를 읽기
+# Read acceleration data from Excel file
 df = pd.read_excel("sensor_data.xlsx", sheet_name="Acceleration")
 
-# 가속도 데이터 배열 생성
+# Create an array of acceleration data
 accel_data = df[['Accel_X', 'Accel_Y', 'Accel_Z']].to_numpy()
 
-# 예상되는 값 설정
-expected_values = np.array([0.0, 0.0, 9.81])  # X, Y는 0, Z는 9.81
+# Set expected values
+expected_values = np.array([0.0, 0.0, 9.81])  # X, Y are 0, Z is 9.81
 
-# 평균값 계산
+# Calculate mean values
 mean_accel = np.mean(accel_data, axis=0)
 
-# 오프셋 계산: 예상되는 값에서 평균값을 뺌
+# Calculate offset: subtract mean values from expected values
 offset_values = mean_accel - expected_values
 
-# 오프셋 출력
+# Print offset values
 print(f"X-axis Offset: {offset_values[0]:.4f} m/s²")
 print(f"Y-axis Offset: {offset_values[1]:.4f} m/s²")
 print(f"Z-axis Offset: {offset_values[2]:.4f} m/s²")
 
-# 그래프 그리기
+# Plot graphs
 labels = ['X-axis', 'Y-axis', 'Z-axis']
 
-# 평균값, 예상값 및 오프셋을 시각화할 그래프
+# Graph to visualize mean values, expected values, and offsets
 plt.figure(figsize=(12, 6))
 
-# 첫 번째 그래프: 평균값 및 예상값
+# First graph: mean values and expected values
 plt.subplot(2, 1, 1)
 plt.bar(labels, mean_accel, color='lightblue', label='Mean Value')
 plt.axhline(0, color='red', linestyle='--', label='Expected Value')
@@ -40,7 +40,7 @@ plt.xticks(rotation=0)
 plt.legend()
 plt.grid(axis='y')
 
-# 두 번째 그래프: 오프셋
+# Second graph: offsets
 plt.subplot(2, 1, 2)
 plt.bar(labels, offset_values, color='orange', label='Offset')
 plt.axhline(0, color='red', linestyle='--', label='Zero Line')
@@ -51,6 +51,6 @@ plt.xticks(rotation=0)
 plt.legend()
 plt.grid(axis='y')
 
-# 그래프 출력
+# Show graphs
 plt.tight_layout()
 plt.show()
